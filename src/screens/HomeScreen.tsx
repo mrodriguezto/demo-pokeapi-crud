@@ -1,14 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
-import {
-  FlatList,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
+import { FlatList, View, StyleSheet, Button } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Ionicons } from "@expo/vector-icons";
+
+import FAB from "../components/FAB";
 import PokemonCard from "../components/PokemonCard";
 import Spinner from "../components/Spinner";
 import usePagination from "../hooks/usePagination";
@@ -18,7 +14,7 @@ import { SimplePokemon } from "../types";
 type NavigationProps = NativeStackNavigationProp<RootStackParams, "HomeScreen">;
 
 const HomeScreen = () => {
-  const { simplePokemonList, loadPokemons } = usePagination();
+  const { simplePokemonList, nextPage, prevPage, isLoading } = usePagination();
   const navigation = useNavigation<NavigationProps>();
 
   const renderPokemon = (pokemon: SimplePokemon) => {
@@ -27,18 +23,32 @@ const HomeScreen = () => {
 
   return (
     <>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate("EditPokemonScreen", { pokemon: undefined })
-            }
-            style={styles.fab}
-          >
-            <Text style={styles.fabText}>Registrar</Text>
-          </TouchableOpacity>
-          <FlatList
-            showsVerticalScrollIndicator={false}
+      <SafeAreaView style={styles.container}>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={true}
+              data={simplePokemonList}
+              numColumns={2}
+              renderItem={({ item }) => renderPokemon(item)}
+              keyExtractor={(pokemon) => pokemon.id}
+            />
+          )}
+        </View>
+
+        <View style={styles.paginationContainer}>
+          <Button title='Prev' onPress={prevPage} />
+          <Button title='Next' onPress={nextPage} />
+        </View>
+
+        {/* <FlatList
+            showsVerticalScrollIndicator={true}
             data={simplePokemonList}
             numColumns={2}
             renderItem={({ item }) => renderPokemon(item)}
@@ -46,8 +56,14 @@ const HomeScreen = () => {
             onEndReached={loadPokemons}
             onEndReachedThreshold={0.4}
             ListFooterComponent={<Spinner />}
-          />
-        </View>
+          /> */}
+        <FAB
+          onPress={() =>
+            navigation.navigate("EditPokemonScreen", { pokemon: undefined })
+          }
+        >
+          <Ionicons name='add' size={24} color='#fff' />
+        </FAB>
       </SafeAreaView>
     </>
   );
@@ -55,6 +71,7 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
     paddingTop: 16,
     position: "relative",
@@ -71,6 +88,13 @@ const styles = StyleSheet.create({
   },
   fabText: {
     color: "#fff",
+  },
+  paginationContainer: {
+    alignItems: "center",
+    justifyContent: "space-around",
+    flexDirection: "row",
+    alignSelf: "stretch",
+    paddingVertical: 16,
   },
 });
 

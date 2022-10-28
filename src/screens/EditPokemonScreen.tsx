@@ -3,6 +3,7 @@ import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import useForm from "../hooks/useForm";
 import { RootStackParams } from "../navigation/StackNavigator";
@@ -31,6 +32,18 @@ const EditPokemonScreen = ({ navigation, route }: Props) => {
 
     if (!result.cancelled) {
       setValue(result.uri, "picture");
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const prevItems = (await AsyncStorage.getItem("@created")) || "[]";
+      await AsyncStorage.setItem(
+        "@created",
+        JSON.stringify([...JSON.parse(prevItems), form])
+      );
+    } catch (e) {
+      console.log("An error has occurred saving to storage");
     }
   };
 
@@ -65,7 +78,7 @@ const EditPokemonScreen = ({ navigation, route }: Props) => {
       </View>
 
       <Text>{JSON.stringify(form, null, 2)}</Text>
-      <FAB>
+      <FAB onPress={handleSave}>
         <Ionicons size={24} color='#fff' name='save' />
       </FAB>
     </SafeAreaView>

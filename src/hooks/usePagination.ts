@@ -1,21 +1,30 @@
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { pokemonApi } from "../api";
 import { PokemonPaginatedResponse, Result, SimplePokemon } from "../types";
+
+const NUMBER_OF_ITEMS = 8;
 
 const usePagination = () => {
   const [simplePokemonList, setSimplePokemonList] = useState<SimplePokemon[]>(
     []
   );
   const [isLoading, setIsLoading] = useState(true);
-  const nextPageUrl = useRef("https://pokeapi.co/api/v2/pokemon?limit=20");
+  const [url, setUrl] = useState<string>(
+    `https://pokeapi.co/api/v2/pokemon?limit=${NUMBER_OF_ITEMS}`
+  );
+  const nextPageUrl = useRef<string | null>(null);
+  const prevPageUrl = useRef<string | null>(null);
 
   const loadPokemons = async () => {
     setIsLoading(true);
-    const res = await pokemonApi.get<PokemonPaginatedResponse>(
-      nextPageUrl.current
-    );
+    if (!url) return;
 
+    const res = await axios.get<PokemonPaginatedResponse>(url);
     nextPageUrl.current = res.data.next;
+    prevPageUrl.current = res.data.previous;
+
+    setIsLoading(false);
+
     mapPokemonList(res.data.results);
   };
 
@@ -27,18 +36,32 @@ const usePagination = () => {
 
       return { id, picture, name };
     });
-    setSimplePokemonList([...simplePokemonList, ...newPokemonList]);
-    setIsLoading(false);
+    // setSimplePokemonList([...simplePokemonList, ...newPokemonList]);
+    setSimplePokemonList(newPokemonList);
   };
 
   useEffect(() => {
     loadPokemons();
-  }, []);
+  }, [url]);
+
+  const nextPage = () => {
+    if (!nextPageUrl.current) return;
+
+    setUrl(nextPageUrl.current);
+  };
+
+  const prevPage = () => {
+    if (!prevPageUrl.current) return;
+
+    setUrl(prevPageUrl.current);
+  };
 
   return {
     simplePokemonList,
     isLoading,
-    loadPokemons,
+    // loadPokemons,
+    prevPage,
+    nextPage,
   };
 };
 

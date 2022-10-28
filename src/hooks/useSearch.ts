@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { pokemonApi } from "../api";
+import axios from "axios";
 
 import { PokemonPaginatedResponse, Result, SimplePokemon } from "../types";
 
@@ -10,7 +10,7 @@ const usePokemonSearch = () => {
   );
 
   const loadPokemons = async () => {
-    const res = await pokemonApi.get<PokemonPaginatedResponse>(
+    const res = await axios.get<PokemonPaginatedResponse>(
       "https://pokeapi.co/api/v2/pokemon?limit=1200"
     );
     mapPokemonList(res.data.results);
