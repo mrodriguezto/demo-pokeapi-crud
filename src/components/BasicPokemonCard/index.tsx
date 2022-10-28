@@ -42,7 +42,7 @@ const BasicPokemonCard = ({ pokemon }: Props) => {
           <Text style={{ ...styles.name, ...styles.text }}>
             {pokemon.name} - {pokemon.id}
           </Text>
-          <Text style={{ ...styles.text }}>Ver detalles</Text>
+          <Text style={styles.text}>Ver detalles</Text>
         </View>
         <FadeInImage uri={pokemon.picture} style={styles.pokemonPicture} />
       </View>

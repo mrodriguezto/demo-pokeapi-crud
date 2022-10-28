@@ -1,15 +1,14 @@
+import { useContext } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Button, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import useForm from "../hooks/useForm";
 import { RootStackParams } from "../navigation/StackNavigator";
 import { SimplePokemon } from "../types";
 import FAB from "../components/FAB";
-import { useContext } from "react";
 import ItemsContext from "../context/Items/ItemsContext";
 
 type Props = NativeStackScreenProps<RootStackParams, "EditPokemonScreen">;

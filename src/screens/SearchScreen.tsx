@@ -9,6 +9,8 @@ import globalStyles from "../styles/globals";
 import { useState } from "react";
 import { SimplePokemon } from "../types";
 import Loading from "../components/Loading";
+import GenerateXlsxDialog from "../components/GenerateXlsxDialog";
+import { writeXlsx } from "../utils/files";
 
 const SearchScreen = () => {
   const { top } = useSafeAreaInsets();
@@ -38,6 +40,17 @@ const SearchScreen = () => {
 
     filterPokemons(term);
   }, [term]);
+
+  const handleGeneration = async (numberOfItems: number) => {
+    const rows = simplePokemonList.splice(0, numberOfItems);
+    const cols = [
+      { header: "Id", key: "id", width: 4 },
+      { header: "Name", key: "name", width: 32 },
+      { header: "Picture", key: "picture", width: 40 },
+    ];
+
+    writeXlsx("GeneratedList.xlsx", "PokemonList", cols, rows);
+  };
 
   if (isFetching) {
     return <Loading />;
@@ -69,6 +82,7 @@ const SearchScreen = () => {
         renderItem={({ item }) => <PokemonCard pokemon={item} />}
         keyExtractor={(pokemon) => pokemon.id}
       />
+      <GenerateXlsxDialog onGenerate={handleGeneration} />
     </View>
   );
 };

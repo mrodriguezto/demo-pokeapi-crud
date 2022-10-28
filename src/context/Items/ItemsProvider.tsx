@@ -12,8 +12,6 @@ const ItemsProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         const prevItems = (await AsyncStorage.getItem("@created")) || "[]";
 
-        console.log({ prevItems });
-
         setItems([...JSON.parse(prevItems)]);
       } catch (e) {
         console.log("An error occurred while saving to storage");
