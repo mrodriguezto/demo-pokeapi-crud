@@ -4,10 +4,12 @@ import StackNavigator from "./StackNavigator";
 
 import SearchStackNavigator from "./SearchStackNavigator";
 import { Ionicons } from "@expo/vector-icons";
+import LocalSavesStackNavigator from "./LocalSavesStackNavigator";
 
 export type RootBottomTabParams = {
-  SearchScreen: undefined;
+  SearchStackNavigator: undefined;
   StackNavigator: undefined;
+  LocalSavesStackNavigator: undefined;
 };
 
 const Tab = createBottomTabNavigator<RootBottomTabParams>();
@@ -34,7 +36,7 @@ const BottomNavigator = () => {
         component={StackNavigator}
       />
       <Tab.Screen
-        name='SearchScreen'
+        name='SearchStackNavigator'
         options={{
           tabBarLabel: "Search Pokemon",
           tabBarIcon: ({ color }) => (
@@ -42,6 +44,16 @@ const BottomNavigator = () => {
           ),
         }}
         component={SearchStackNavigator}
+      />
+      <Tab.Screen
+        name='LocalSavesStackNavigator'
+        options={{
+          tabBarLabel: "Saved List",
+          tabBarIcon: ({ color }) => (
+            <Ionicons name='save' color={color} size={20} />
+          ),
+        }}
+        component={LocalSavesStackNavigator}
       />
     </Tab.Navigator>
   );

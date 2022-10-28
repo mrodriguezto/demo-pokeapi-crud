@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import SearchScreen from "../screens/SearchScreen";
 import PokemonScreen from "../screens/PokemonScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -13,7 +13,7 @@ const SearchStackNavigator = () => {
         headerShown: false,
       }}
     >
-      <Stack.Screen name='HomeScreen' component={SearchScreen} />
+      <Stack.Screen name='SearchScreen' component={SearchScreen} />
       <Stack.Screen name='PokemonScreen' component={PokemonScreen} />
     </Stack.Navigator>
   );

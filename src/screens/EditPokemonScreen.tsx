@@ -9,6 +9,8 @@ import useForm from "../hooks/useForm";
 import { RootStackParams } from "../navigation/StackNavigator";
 import { SimplePokemon } from "../types";
 import FAB from "../components/FAB";
+import { useContext } from "react";
+import ItemsContext from "../context/Items/ItemsContext";
 
 type Props = NativeStackScreenProps<RootStackParams, "EditPokemonScreen">;
 
@@ -22,6 +24,7 @@ const EditPokemonScreen = ({ navigation, route }: Props) => {
   const { pokemon } = route.params;
   const isEditting = Boolean(pokemon);
   const { id, name, picture, form, setValue } = useForm(pokemon || initialData);
+  const { addItem, updateItem, removeItem } = useContext(ItemsContext);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -35,16 +38,15 @@ const EditPokemonScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const handleSave = async () => {
-    try {
-      const prevItems = (await AsyncStorage.getItem("@created")) || "[]";
-      await AsyncStorage.setItem(
-        "@created",
-        JSON.stringify([...JSON.parse(prevItems), form])
-      );
-    } catch (e) {
-      console.log("An error has occurred saving to storage");
-    }
+  const handleSave = () => {
+    if (isEditting) updateItem(form);
+    else addItem(form);
+  };
+
+  const handleRemove = () => {
+    removeItem(pokemon!.id);
+
+    navigation.replace("LocalSavesScreen");
   };
 
   return (
@@ -78,6 +80,11 @@ const EditPokemonScreen = ({ navigation, route }: Props) => {
       </View>
 
       <Text>{JSON.stringify(form, null, 2)}</Text>
+
+      {isEditting ? (
+        <Button title='Delete item' onPress={handleRemove} color='red' />
+      ) : null}
+
       <FAB onPress={handleSave}>
         <Ionicons size={24} color='#fff' name='save' />
       </FAB>

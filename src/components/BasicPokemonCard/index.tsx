@@ -1,4 +1,3 @@
-import React, { useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -17,9 +16,12 @@ interface Props {
   pokemon: SimplePokemon;
 }
 
-type NavigationProps = NativeStackNavigationProp<RootStackParams, "HomeScreen">;
+type NavigationProps = NativeStackNavigationProp<
+  RootStackParams,
+  "LocalSavesScreen"
+>;
 
-const PokemonCard = ({ pokemon }: Props) => {
+const BasicPokemonCard = ({ pokemon }: Props) => {
   const navigation = useNavigation<NavigationProps>();
 
   const { width } = useWindowDimensions();
@@ -27,7 +29,7 @@ const PokemonCard = ({ pokemon }: Props) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={() => navigation.navigate("PokemonScreen", { pokemon })}
+      onPress={() => navigation.navigate("EditPokemonScreen", { pokemon })}
     >
       <View
         style={{
@@ -48,4 +50,4 @@ const PokemonCard = ({ pokemon }: Props) => {
   );
 };
 
-export default PokemonCard;
+export default BasicPokemonCard;

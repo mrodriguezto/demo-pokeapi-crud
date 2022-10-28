@@ -57,13 +57,6 @@ const HomeScreen = () => {
             onEndReachedThreshold={0.4}
             ListFooterComponent={<Spinner />}
           /> */}
-        <FAB
-          onPress={() =>
-            navigation.navigate("EditPokemonScreen", { pokemon: undefined })
-          }
-        >
-          <Ionicons name='add' size={24} color='#fff' />
-        </FAB>
       </SafeAreaView>
     </>
   );
@@ -75,19 +68,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 16,
     position: "relative",
-  },
-  fab: {
-    backgroundColor: "#444",
-    borderRadius: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    position: "absolute",
-    bottom: 8,
-    right: 8,
-    zIndex: 999,
-  },
-  fabText: {
-    color: "#fff",
   },
   paginationContainer: {
     alignItems: "center",

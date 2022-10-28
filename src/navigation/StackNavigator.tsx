@@ -7,6 +7,8 @@ import { SimplePokemon } from "../types";
 
 export type RootStackParams = {
   HomeScreen: undefined;
+  SearchScreen: undefined;
+  LocalSavesScreen: undefined;
   PokemonScreen: { pokemon: SimplePokemon };
   EditPokemonScreen: { pokemon: SimplePokemon | undefined };
 };
@@ -23,7 +25,6 @@ const StackNavigator = () => {
     >
       <Stack.Screen name='HomeScreen' component={HomeScreen} />
       <Stack.Screen name='PokemonScreen' component={PokemonScreen} />
-      <Stack.Screen name='EditPokemonScreen' component={EditPokemonScreen} />
     </Stack.Navigator>
   );
 };
