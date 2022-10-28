@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 15,
+    position: "relative",
   },
   title: {
     fontSize: 22,

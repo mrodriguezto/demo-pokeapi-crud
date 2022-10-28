@@ -46,10 +46,32 @@ export const writeXlsx = async (
     });
 };
 
-export const writePdf = async (html: string) => {
+export const writePdf = async (fileName: string, html: string) => {
+  const permissions =
+    await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+  if (!permissions.granted) return;
+
   try {
-    const { uri } = await printToFileAsync({ html });
-    console.log({ uri });
+    const { uri } = await printToFileAsync({ html, base64: true }); // Save locally and get uri
+
+    const content = await FileSystem.readAsStringAsync(uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    await FileSystem.StorageAccessFramework.createFileAsync(
+      permissions.directoryUri,
+      fileName,
+      "application/pdf"
+    )
+      .then(async (uri) => {
+        await FileSystem.writeAsStringAsync(uri, content, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        console.log("Succesfully Saved");
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   } catch (err) {
     console.error(err);
   }

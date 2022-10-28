@@ -1,19 +1,59 @@
 import React from "react";
 import { View, Text, ScrollView } from "react-native";
 import { PokemonDetails as IPokemonDetails } from "../../types";
+import FAB from "../FAB";
 import { FadeInImage } from "../FadeInImage";
 import styles from "./styles";
+import { Ionicons } from "@expo/vector-icons";
+import { writePdf } from "../../utils/files";
 
 interface Props {
   pokemon: IPokemonDetails;
 }
 
 const PokemonDetails = ({ pokemon }: Props) => {
+  const handlePrint = () => {
+    const html = `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pdf Content</title>
+        <style>
+            body {
+                font-size: 16px;
+                text-align: center;
+            }
+
+            .types-container {
+              display: flex;
+              justify-content: space-around
+            }
+
+        </style>
+    </head>
+    <body>
+        <h1>${pokemon.name} - ${pokemon.id}</h1>
+        <img src="${pokemon.sprites.front_default}">
+        <h3>Types</h3>
+        <div class="types-container">
+      
+        ${pokemon.types.map(({ type }) => `<span>${type.name}</span>`)}
+        </div>
+    </body>
+    </html>
+    `;
+
+    writePdf("details.pdf", html);
+  };
+
   return (
-    <>
+    <View>
       {/* Types */}
       <View style={{ ...styles.container }}>
         <Title text='Types' />
+
         <View style={{ flexDirection: "row" }}>
           {pokemon.types.map(({ type }) => (
             <ContentText content={type.name} key={type.name} margin />
@@ -86,7 +126,10 @@ const PokemonDetails = ({ pokemon }: Props) => {
           ))}
         </View>
       </View>
-    </>
+      <FAB onPress={handlePrint}>
+        <Ionicons name='download-outline' size={24} color='#fff' />
+      </FAB>
+    </View>
   );
 };
 
