@@ -14,7 +14,6 @@ export type SimplePokemon = {
   id: string;
   name: string;
   picture: string;
-  color?: string;
 };
 
 export type PokemonDetails = {

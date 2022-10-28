@@ -1,13 +1,25 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { Button, FlatList, View } from "react-native";
+import {
+  FlatList,
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PokemonCard from "../components/PokemonCard";
 import Spinner from "../components/Spinner";
 import usePagination from "../hooks/usePagination";
+import { RootStackParams } from "../navigation/StackNavigator";
 import { SimplePokemon } from "../types";
+
+type NavigationProps = NativeStackNavigationProp<RootStackParams, "HomeScreen">;
 
 const HomeScreen = () => {
   const { simplePokemonList, loadPokemons } = usePagination();
+  const navigation = useNavigation<NavigationProps>();
 
   const renderPokemon = (pokemon: SimplePokemon) => {
     return <PokemonCard pokemon={pokemon} />;
@@ -16,14 +28,15 @@ const HomeScreen = () => {
   return (
     <>
       <SafeAreaView>
-        <View
-          style={{
-            alignItems: "center",
-            paddingTop: 16,
-            position: "relative",
-          }}
-        >
-          <Button title='Crear' />
+        <View style={styles.container}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("EditPokemonScreen", { pokemon: undefined })
+            }
+            style={styles.fab}
+          >
+            <Text style={styles.fabText}>Registrar</Text>
+          </TouchableOpacity>
           <FlatList
             showsVerticalScrollIndicator={false}
             data={simplePokemonList}
@@ -39,5 +52,26 @@ const HomeScreen = () => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    paddingTop: 16,
+    position: "relative",
+  },
+  fab: {
+    backgroundColor: "#444",
+    borderRadius: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    position: "absolute",
+    bottom: 8,
+    right: 8,
+    zIndex: 999,
+  },
+  fabText: {
+    color: "#fff",
+  },
+});
 
 export default HomeScreen;

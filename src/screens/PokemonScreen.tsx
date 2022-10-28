@@ -20,7 +20,7 @@ import PokemonDetails from "../components/PokemonDetails";
 type Props = NativeStackScreenProps<RootStackParams, "PokemonScreen">;
 
 const PokemonScreen = ({ navigation, route }: Props) => {
-  const { pokemon, color } = route.params;
+  const { pokemon } = route.params;
   const { top } = useSafeAreaInsets();
   const { isLoading, pokemonDetails } = usePokemon(pokemon.id);
 
@@ -37,7 +37,7 @@ const PokemonScreen = ({ navigation, route }: Props) => {
         <View
           style={{
             ...styles.headerContainer,
-            backgroundColor: color,
+            backgroundColor: "#222",
           }}
         >
           {/* Name */}
